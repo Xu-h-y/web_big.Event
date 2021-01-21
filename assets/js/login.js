@@ -17,7 +17,8 @@ $(function() {
         pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
         uname: [/^[a-zA-Z0-9]+$/],
         rpwd: function(value) {
-            var pwd = $('.reg-box [name=password]').val();
+            console.log(value);
+            var pwd = $('#pwd').val();
             if (pwd !== value) {
                 return '两次密码不一致！';
             }
@@ -28,22 +29,21 @@ $(function() {
 
     //监听表单注册
     $('#form_reg').on('submit', function(e) {
-        console.log($('#uname').val());
         e.preventDefault();
         $.ajax({
             type: 'POST',
             url: "/api/reguser",
             data: {
-                username: $('#uname').val(),
-                password: $('#pwd').val(),
+                username: $('.reg-box [name=username]').val(),
+                password: $('.reg-box [name=password]').val(),
             },
             success: function(res) {
                 console.log(res);
                 if (res.status !== 0) {
-                    return layer.msg(res.massage)
+                    return layer.msg(res.message)
                 } else {
-                    layer.msg(res.massage);
-                    $('#form-login').click();
+                    $('#link_login').click();
+                    layer.msg(res.message);
                 }
             }
         })
@@ -60,7 +60,7 @@ $(function() {
             success: function(res) {
                 console.log(res);
                 if (res.status !== 0) {
-                    return layer.msg(res.massage)
+                    return layer.msg(res.message)
                 } else {
                     localStorage.setItem('token', res.token);
                     location.href = "index.html";
